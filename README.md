@@ -180,9 +180,9 @@ PYPI_PYMISP_VERSION="==2.4.176"
 ##
 
 # Email/username for user #1, defaults to MISP's default (admin@admin.test)
-ADMIN_EMAIL=admin@pisword.local
+ADMIN_EMAIL=admin@{PISWORD_HOSTNAME} # Update domain name to match the hostname of the PiSword host
 # name of org #1, default to MISP's default (ORGNAME)
-ADMIN_ORG=pisword
+ADMIN_ORG=pisword                    # Change to match the name of the organization
 # defaults to an automatically generated one
 ADMIN_KEY=
 # defaults to MISP's default (admin)
@@ -192,7 +192,7 @@ GPG_PASSPHRASE=
 # defaults to 1 (the admin user)
 CRON_USER_ID=
 # defaults to 'https://localhost'
-HOSTNAME=https://misp.pisword.local
+HOSTNAME=https://{MISP_URL} # Update this to the hostname of the MISP server
 
 # optional and used by the mail sub-system
 SMARTHOST_ADDRESS=
@@ -238,63 +238,16 @@ sudo docker-compose build
 sudo docker-compose up
 ```
 
-### MISP Docker Install Instructions
-- Fetch and install the latest version of the MISP Docker repository by running the following command:
-```bash
-git clone https://github.com/MISP/misp-docker
-cd misp-docker
-# Copy template.env to .env (on the root directory) and edit the environment variables at .env file
-cp template.env .env
-vi .env  # Change default passwords and other settings as desired
-...
-MYSQL_HOST=misp_db
-MYSQL_DATABASE=misp
-MYSQL_USER=misp
-MYSQL_PASSWORD=misp # rahvy1-dunwuj-Wezcum
-MYSQL_ROOT_PASSWORD=misp # dyWfoq-totvon-5durqy
-
-MISP_ADMIN_EMAIL=admin@admin.test # Change to admin@misp.pisword.local
-MISP_ADMIN_PASSPHRASE=admin # Will update this later inside of application
-MISP_BASEURL=https://localhost # Change to https://misp.pisword.local
-
-POSTFIX_RELAY_HOST=relay.fqdn
-TIMEZONE=Europe/Brussels # Change to America/New_York
-
-DATA_DIR=./data
-```
-- Build the containers
-```bash 
-sudo docker-compose build
-# OR
-sudo docker-compose -f docker-compose.yml build
-```
-- Start the containers
-```bash
-sudo docker-compose up
-# or
-sudo docker-compose -f docker-compose.yml up
-```
-
-- Add the following line to your /etc/hosts file:
-```bash
-localhost misp.pisword.local
-```
-
 References:
 - [MISP Docker Install Instructions](https://github.com/ostefano/docker-misp)
 - [MISP Project Website](http://www.misp-project.org)
 
 # Configure MISP
 ## Generate API KEY
-- Login to MISP using the default credentials ('admin@pisword.local', 'admin')
+- Login to MISP using the default credentials ('admin@{PISWORD_HOSTNAME}', 'admin') # Set the email address to the one specified in the .env file
 - Change the admin password to something more secure
-- Navigate to the [Auth Keys](https://misp.pisword.local/auth_keys/add) page
+- Navigate to the [Auth Keys](https://{MISP_URL}/auth_keys/add) page 
 - Copy the API key to ~/pisword/config/misp.yaml for later use:
-```bash
-Pidev MISP API Key: fpO6PsSC4JlfYbI0SI0BwFE9KDjbknYb25VlZbDp 
-PiSword MISP API Key: Nl1w8y1vSyFT5Kmqc2rb7xPmSewh3TzGXVAjd8yF
-pisword-dev MISP API Key: qEpGART6KisGULUm60qOYE4nbi9uZN9v8v9kbtm5
-```
 
 
 # Test PyMISP Script
@@ -516,9 +469,10 @@ pkg -C /dev/null add https://github.com/jaredhendrickson13/pfsense-api/releases/
     - Copy down the client-id and API key
     - Example:
         - Usernane: `pisword`
-        - clientid: `86753098675309`
+        - clientid: `86753098675309` # Your cliet-id and api-key will be different
         - api-key: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-4. Set API key variable in the bashrc file on the PiSword host
+4. Set API key variable in the bashrc file on the PiSword host 
+_Note: The pfSense API key consists of the client-id and api-key separated by a space_
 ```bash
 # Optional, for local testing only
 echo "export PFSENSE_API_KEY='86753098675309 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'" >> ~/.bashrc 
@@ -539,7 +493,7 @@ echo "export PFSENSE_API_KEY='86753098675309 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'" 
     - Go to System > Advanced > Admin Access
     - Set the SSL certificate to `pisword_server`
     - Set the common name as `pisword.pisword-dev.local`
-    - Set an alternate common name as `pisword.pisword.local`
+    - Set an alternate common name (if desired)
     - Save the certificates to the `./certs` folder
 
 
