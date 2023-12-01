@@ -395,26 +395,30 @@ _*Note*: The `eth0` interface is used for management and is not connected to the
 sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 ```
 20. Your PiSword VM should now be able to communicate with the pfSense VM and the internet.
-_*Note*: You will have to configure `allow` rules on the pfSense WAN interface to allow `ssh` traffic into the environment. You can also configure port forwarding to access the MISP Web console from an external environment. It is recommended to add an entry for the pfSense WAN interface IP address to your local system's `hosts` file if using this deployment._
-    Linux:
-    ```bash
-    # Modify the hosts file on your local system For remote access into the GNS3 environment
-    sudo vi /etc/hosts 
-    ...
-    
-    {PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
-    ```
 
-    Windows:
-    ```powershell
-    # Launch from an elevated session 
-    notepad C:\Windows\System32\drivers\etc\hosts # Windows users only
-    ...
-    {PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
-    ```
+_*Note*: You will have to configure `allow` rules on the pfSense WAN interface to allow `ssh` traffic into the environment. You can also configure port forwarding to access the MISP Web console from an external environment. It is recommended to add an entry for the pfSense WAN interface IP address to your local system's `hosts` file if using this deployment._
+
+Linux:
+```bash
+# Modify the hosts file on your local system For remote access into the GNS3 environment
+sudo vi /etc/hosts 
+...
+
+{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+```
+
+Windows:
+```powershell
+# Launch a PowerShell terminal as Administrator
+notepad C:\Windows\System32\drivers\etc\hosts # Windows users only
+...
+{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+```
 
 ## Install and configure pfSense API
+
 - Reference: [pfSense API Documentation](https://github.com/jaredhendrickson13/pfsense-api)
+  
 1. Log into the pfSense console in GNS3 and select `8` to open a shell
 2. Install the pfSense API package by running the following command:
 ```bash
