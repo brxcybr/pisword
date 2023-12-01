@@ -48,7 +48,8 @@ $ python pisword.py
 
 # Pi|SWORD Install and Configuration
 ## Installing the operating system
-- Install the latest version of Raspbian on your Raspberry Pi or Virtual Machine from the [Raspberry Pi Foundation Site](https://www.raspberrypi.org/downloads/raspbian/).
+- Install the latest 64-bit version of Raspbian on your Raspberry Pi from the [Raspberry Pi Foundation Site](https://www.raspberrypi.org/downloads/raspbian/).
+- For a virtualized deployment, download the arm64 Debian 11 (Bullseye) ISO from the [Debian website](https://www.debian.org/releases/bullseye/) and setup as a new virtual machine
 - Once the installation is complete, update the system by running the following commands:
 ```bash
 sudo apt update -y
@@ -245,7 +246,7 @@ sudo docker-compose build
 sudo docker-compose up
 ```
 
-3. Login to MISP using the default credentials ('admin@{PISWORD_HOSTNAME}', 'admin') # Set the email address to the one specified in the .env file
+3. Login to MISP using the default credentials `admin@{PISWORD_HOSTNAME} : admin` # Set the email address to the one specified in the .env file
 4. Once the container starts, change the admin password to something more secure
 5. Navigate to the [Auth Keys](https://{MISP_URL}/auth_keys/add) page and generate a new API key 
 6. If you have not done so already, create a new configuration file from the template
