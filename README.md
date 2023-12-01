@@ -338,7 +338,7 @@ export REQUESTS_CA_BUNDLE=~/Documents/pisword/certs/client.crt
 
 # Setup GNS3 For Testing (Optional)
 ![GNS3 Network Diagram](images/gns3_network_diagram.png)
-This is an optional step for testing the application in a virtualized environment (e.g. without a Raspberry Pi)
+This is an optional step for testing the application in a virtualized environment (e.g. without installing Pi|SWORD on a Raspberry Pi)
 
 - Reference: [GNS3 Windows Install](https://docs.gns3.com/docs/getting-started/installation/windows/)
 1. Download the latest version of GNS3 from the [GNS3 Website](https://www.gns3.com/software/download)
@@ -352,43 +352,39 @@ unzip ~/Downloads/GNS3.VM.VMware.Workstation.2.2.43.zip
 6. In the GNS3 Setup Wizard, select `Vmware (recommended)` under Virtualization Software, and select the GNS3 VM from the drop down menu. 
 7. Configure the following network settings:
     - Adapter 1: Host-Only (VMNet1 - Where GNS3 will get its IP address via DHCP)
-    - Adapter 1: Bridged (vmnet0) - Ethernet Interface (Where pfSense will get its IP address via DHCP)
-    - Adapter 2: Host-Only (VMNet2 - Where PiSword will get its IP address via DHCP from DHCP)
+    - Adapter 1: Bridged - Ethernet Interface (Where pfSense will get its IP address via DHCP)
+    - Adapter 2: Host-Only (VMNet3 - Used to communicate with other nodes in the topology)
 7. Take a snapshot once the VM is up and running
-8. Access the Web-UI via http://192.168.220.128
+8. Access the Web-UI via `http://{GNS3_VM_IP}` # update to match your local environment
 - Alnatively, can login using ssh
 ```bash
 ssh gns3@{GNS3_VM_IP}
 ```
 10. Click `New Template` -> `Install appliance from server` -> `Search by name` -> `pfSense` -> `Download this appliance` or `Import` if already downloaded
 11. Under `pfSense version 2.7.0` import or download the qcow2 image using the provided [link](https://sourceforge.net/projects/gns-3/files/Empty%20Qemu%20disk/empty100G.qcow2/download)
-12. Open the virtual machine network configuration editor and create two new host-only networks (vmnet2 and vmnet3)
-  - vmnet0: {LOCAL_DHCP_NETWORK} (Depends on local DHCP settings)
-  - vmnet2: {PISWORD_NETWORK_RANGE}
-13. Drag the pfSense template into the network topology and configure the network adapters as follows:
-  - Set Adapter 0: vmnet0
-  - Set Adapter 1: vmnet2
-14. Default pfSense credentials are `admin`:`pfsense`
 
-# Setup pfSense Firewall (Testing)
-1. Download the latest ISO image from the [pfSense website](https://www.pfsense.org/download/)
-2. Extract the ISO from the archive:
+12. Drag the pfSense template into the network topology and configure the network adapters as follows (Right click on the node and select `Configure`):
+  - Set Adapters: 2
+  - Type: vmxnet3
+
+13. Drag a Cloud node to the topology
+
+14. Click the bottom left icon that looks like an ethernet cable to add a link and connect the `eth1` interface to the pfSense `vmx0` (WAN) interface
+_Note: The `eth0` interface is used for management and is not connected to the topology. `eth1` is the bridged interface that will allow pfSense to get a WAN IP address over DHCP_
+
+15. Start the pfSense node and open the console by right clicking on the node and selecting `Console`. Select option `2` to set the WAN interface to DHCP and then configure the LAN interface as desired.
+
+16. Import the PiSword VM into GNS3 by clicking `Edit` -> `Preferences` -> `VMware VMs` (or `VirtualBox VMs`) -> `New` -> `Browse` -> `Select the PiSword VM` -> `Finish` -> `Apply` -> `OK`
+
+17. Drag a switch node into the diagram and connect `Ethernet0` to the pfSense LAN interface, `vmx1`.
+
+18. Drag the PiSword VM into the topology and connect it to `Ethernet1` interface on the switch node. 
+`Note: You may need to change the network adapter type to vmxnet3 in the PiSword VM settings. You can force the PiSword VM to use DHCP by running the following command:`
 ```bash
-gunzip pfSense-CE-2.7.0-RELEASE-amd64.iso.gz
+sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 ```
-3. Verify the file hash:
-```bash
-sha256sum pfSense-CE-2.7.0-RELEASE-amd64.iso
-```
-4. Create a new virtual machine with the following settings:
-    - 2GB RAM
-    - 2 CPU Cores
-    - 2 Network Adapters
-        - Adapter 1: NAT
-        - Adapter 2: Host-Only
-    - 20GB HDD
-5. Install the pfSense ISO on the virtual machine
-6. Configure the WAN interface to use DHCP
+
+19. Your PiSword VM should now be able to communicate with the pfSense VM and the internet. 
 
 # Install and configure pfSense API
 - Reference: [pfSense API Documentation](https://github.com/jaredhendrickson13/pfsense-api)
