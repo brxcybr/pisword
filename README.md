@@ -332,11 +332,13 @@ pip install -r requirements.txt
 pip install flask flask_restful pymisp pyyaml pyflowchart requests cssselect lxml importlib curses pyautogui
 ```
 
-## Setup GNS3 For Testing (Optional)
+# Setup GNS3 For Testing (Optional)
 ![GNS3 Network Diagram](images/gns3_topology.png)
 This is an optional step for testing the application in a virtualized environment (e.g. without installing Pi|SWORD on a Raspberry Pi)
 
-- Reference: [GNS3 Windows Install](https://docs.gns3.com/docs/getting-started/installation/windows/)
+References: 
+- [GNS3 Windows Install](https://docs.gns3.com/docs/getting-started/installation/windows/)
+  
 1. Download the latest version of GNS3 from the [GNS3 Website](https://www.gns3.com/software/download)
 2. Follow the instructions and install using default settings
 3. Download the GNS3 VM for VMWare Workstation using this [link](https://github.com/GNS3/gns3-gui/releases/download/v2.2.43/GNS3.VM.VMware.Workstation.2.2.43.zip)
@@ -382,7 +384,7 @@ sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 
 19. Your PiSword VM should now be able to communicate with the pfSense VM and the internet. 
 
-### Install and configure pfSense API
+## Install and configure pfSense API
 - Reference: [pfSense API Documentation](https://github.com/jaredhendrickson13/pfsense-api)
 1. Log into the pfSense console in GNS3 and select `8` to open a shell
 2. Install the pfSense API package by running the following command:
