@@ -332,7 +332,7 @@ pip install -r requirements.txt
 pip install flask flask_restful pymisp pyyaml pyflowchart requests cssselect lxml importlib curses pyautogui
 ```
 
-# Setup GNS3 For Testing (Optional)
+## Setup GNS3 For Testing (Optional)
 ![GNS3 Network Diagram](images/gns3_topology.png)
 This is an optional step for testing the application in a virtualized environment (e.g. without installing Pi|SWORD on a Raspberry Pi)
 
@@ -382,7 +382,7 @@ sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 
 19. Your PiSword VM should now be able to communicate with the pfSense VM and the internet. 
 
-# Install and configure pfSense API
+### Install and configure pfSense API
 - Reference: [pfSense API Documentation](https://github.com/jaredhendrickson13/pfsense-api)
 1. Log into the pfSense console in GNS3 and select `8` to open a shell
 2. Install the pfSense API package by running the following command:
@@ -434,7 +434,7 @@ pkg -C /dev/null add https://github.com/jaredhendrickson13/pfsense-api/releases/
     - Check the `Trust this CA to identify websites` box
     - Click `OK`
 
-## Create an API user     
+### Create an API user     
 1. Create API Users group
     - System > User Manager > Groups > Add
     - Group Name: `api_users`   # Can be anything (Be consistent throughout the configuration)
@@ -469,8 +469,13 @@ _Note: The pfSense API key consists of the client-id and api-key separated by a 
 # Optional, for local testing only
 echo "export PFSENSE_API_KEY='86753098675309 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'" >> ~/.bashrc 
 ```
-5. Update the `./config/pfsense.yaml` file with the API key
-## Create certificates for MISP, PiSword, and api-user
+5. Update `url` and `api_key` fields in the `./config/pfsense.yaml` configuration file
+```bash
+# Modify the configuration file using the provided template
+mv ./config/pfsense.template.yaml ./config/pfsense.yaml
+```
+   
+### Create certificates for MISP, PiSword, and api-user
 1. Following the same process as the pfSense server certificate, create a new certificate for the MISP server
     - System > Cert Manager > Certificates > Add/Sign
     - Create a new server certificates and name it `misp_server`
@@ -489,7 +494,7 @@ echo "export PFSENSE_API_KEY='86753098675309 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'" 
     - Save the certificates to the `./certs` folder
 
 
-## pfSense API Call Output
+### pfSense API Call Output
 - Example PFSense Firewall Logs:
 ```bash
 "Nov  7 05:55:08 pfSense filterlog[50918]: 4,,,1000000103,vmx0,match,block,in,4,0x0,,64,43867,0,DF,17,udp,32,192.168.33.1,255.255.255.255,51233,10001,12",
