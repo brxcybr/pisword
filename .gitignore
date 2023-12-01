@@ -167,4 +167,7 @@ config/misp.yaml
 config/pfsense.yaml
 README_LOCAL.md 
 feeds/
+playbooks/*
+!playbooks/test.yaml
+!playbooks/playbook_template.yaml
 practicum.code-workspace
