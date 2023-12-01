@@ -49,13 +49,23 @@ $ python pisword.py
 # Pi|SWORD Install and Configuration
 ## Installing the operating system
 - Install the latest 64-bit version of Raspbian on your Raspberry Pi from the [Raspberry Pi Foundation Site](https://www.raspberrypi.org/downloads/raspbian/).
-- For a virtualized deployment, download the arm64 Debian 11 (Bullseye) ISO from the [Debian website](https://www.debian.org/releases/bullseye/) and setup as a new virtual machine
+- For a virtualized deployment, download the arm64 Debian 11 (Bullseye) ISO from the [Debian website](https://www.debian.org/releases/bullseye/)
+
+- If using a virtualized deployment:
+  Create a new virtual machine and configure with the following _recommended_ settings:
+        - **Memory**: _8 GB_
+        - **Processors**_
+            - **Number of processors**: _2_
+            - **Number of cores per processor**: _2_
+        - **Hard Disk** _(minimum)_: _32 GB_
+        - **Network Adapter**: _VMnet3_ (If using GNS3 Deployment)
+
 - Once the installation is complete, update the system by running the following commands:
 ```bash
 sudo apt update -y
 sudo apt upgrade -y
 ```
-## Install Optional packages
+### Install Optional packages
 - Install any additional desired packages by running the following command:
 ```bash
 # Install optional packages
@@ -80,7 +90,7 @@ If you get an error about not being able to run the configuration script, launch
 sudo /usr/bin/vmware-config-tools.pl
 ```
 
-## Configure required services (Optional)
+### Configure required services (Optional)
 - Configure the SSH service by running the following command:
 ```bash
 sudo vi /etc/ssh/sshd_config
@@ -94,7 +104,12 @@ sudo systemctl enable --now ssh
 ```
 
 ## Install docker
-- If you are using a Raspberry Pi, you will need to install docker manually by running the following commands:
+
+References:
+- [Docker Install Instructions - Virtualized Raspberry Pi](https://docs.docker.com/engine/install/debian/)
+- [Docker Install Instructions - Raspberry Pi](https://docs.docker.com/engine/install/raspberry-pi-os/)
+
+If you are using a Raspberry Pi, you will need to install docker manually by running the following commands:
 ```bash
 # Uninstall old versions of docker
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -142,9 +157,6 @@ which docker-compose
 ## If not, run the following command
 sudo ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
 ```
-References:
-- [Docker Install Instructions - Virtualized Raspberry Pi](https://docs.docker.com/engine/install/debian/)
-- [Docker Install Instructions - Raspberry Pi](https://docs.docker.com/engine/install/raspberry-pi-os/)
 
 ## Install and Configure MISP 
 References:
@@ -366,23 +378,40 @@ ssh gns3@{GNS3_VM_IP}
   - Type: vmxnet3
 
 13. Drag a Cloud node to the topology
+_*Note*: Using a Cloud node instead of a NAT Cloud allows you to `ssh` into your virtualized environment_
 
-14. Click the bottom left icon that looks like an ethernet cable to add a link and connect the `eth1` interface to the pfSense `vmx0` (WAN) interface
-_Note: The `eth0` interface is used for management and is not connected to the topology. `eth1` is the bridged interface that will allow pfSense to get a WAN IP address over DHCP_
+15. Click the bottom left icon that looks like an ethernet cable to add a link and connect the `eth1` interface to the pfSense `vmx0` (WAN) interface
+_*Note*: The `eth0` interface is used for management and is not connected to the topology. `eth1` is the bridged interface that will allow pfSense to get a WAN IP address over DHCP_
 
-15. Start the pfSense node and open the console by right clicking on the node and selecting `Console`. Select option `2` to set the WAN interface to DHCP and then configure the LAN interface as desired.
+16. Start the pfSense node and open the console by right clicking on the node and selecting `Console`. Select option `2` to set the WAN interface to DHCP and then configure the LAN interface as desired.
 
-16. Import the PiSword VM into GNS3 by clicking `Edit` -> `Preferences` -> `VMware VMs` (or `VirtualBox VMs`) -> `New` -> `Browse` -> `Select the PiSword VM` -> `Finish` -> `Apply` -> `OK`
+17. Import the PiSword VM into GNS3 by clicking `Edit` -> `Preferences` -> `VMware VMs` (or `VirtualBox VMs`) -> `New` -> `Browse` -> `Select the PiSword VM` -> `Finish` -> `Apply` -> `OK`
 
-17. Drag a switch node into the diagram and connect `Ethernet0` to the pfSense LAN interface, `vmx1`.
+18. Drag a switch node into the diagram and connect `Ethernet0` to the pfSense LAN interface, `vmx1`.
 
-18. Drag the PiSword VM into the topology and connect it to `Ethernet1` interface on the switch node. 
-`Note: You may need to change the network adapter type to vmxnet3 in the PiSword VM settings. You can force the PiSword VM to use DHCP by running the following command:`
+19. Drag the Pi|SWORD VM into the topology and connect it to `Ethernet1` interface on the switch node. 
+`*Note*: You may need to change the network adapter type to vmxnet3 in the PiSword VM settings. You can force the PiSword VM to use DHCP by running the following command:`
 ```bash
 sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 ```
+20. Your PiSword VM should now be able to communicate with the pfSense VM and the internet.
+_*Note*: You will have to configure `allow` rules on the pfSense WAN interface to allow `ssh` traffic into the environment. You can also configure port forwarding to access the MISP Web console from an external environment. It is recommended to add an entry for the pfSense WAN interface IP address to your local system's `hosts` file if using this deployment._
+    Linux:
+    ```bash
+    # Modify the hosts file on your local system For remote access into the GNS3 environment
+    sudo vi /etc/hosts 
+    ...
+    
+    {PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+    ```
 
-19. Your PiSword VM should now be able to communicate with the pfSense VM and the internet. 
+    Windows:
+    ```powershell
+    # Launch from an elevated session 
+    notepad C:\Windows\System32\drivers\etc\hosts # Windows users only
+    ...
+    {PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+    ```
 
 ## Install and configure pfSense API
 - Reference: [pfSense API Documentation](https://github.com/jaredhendrickson13/pfsense-api)
