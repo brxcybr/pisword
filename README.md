@@ -39,7 +39,9 @@ $ python pisword.py
 ![PiSword Menu](images/main_menu.png)
 
 ## Program Logic
-![PiSword Program Logic](images/pisword_logic_flowchart.png)
+<div style="background-color:white;">
+    <img src="images/pisword_logic_flowchart.png" alt="Pi|SWORD Program Logic">
+</div>
 
 # Pi|SWORD Install and Configuration
 ## Installing the operating system
