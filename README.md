@@ -1,29 +1,34 @@
 ![PiSword Header](images/pisword_logo.png)
 # Pi|SWORD
-*A Python-based SOAR Platform Lightweight enough for any Environment*
+*A Python-based SOAR Platform, lightweight enough for _any_ environment*
 
 ## Description
 _*Pi|SWORD*_ is a **SOAR** _(Security Orchestration, Automation, and Response)_ application and integration framework that is 
-purpose-built to run efficiently in edge or small-office/home-office environments, such as on a Raspberry Pi
-- The application reads YAML configuration files from the `./config` directory, and then executes the actions specified in the YAML files. 
-- Once a playbook is launch, and will run continuously until stopped. It is designed to run statelessly, meaning that it 
+purpose-built to run efficiently in edge or small-office/home-office environments, such as on a Raspberry Pi or inside of a Virtual Machine
+- It provides an extensible framework for third-party integration support, playbook building, and management
+- Pi|SWORD is designed to run statelessly, meaning that it 
 does not need to store any data between runs, and reads the local configuration files and playbooks at launch.
-- Features a `curses`-based menu system for creating, editing, and launching playbooks
+- Third-party integrations are initialized using YAML configuration files from the `./config` directory, which allows users to build playbooks from supported integration functions
+- Supported integration functions are imported dynamically from the `./integrations` directory, which can be modified to provide additional functionality
+- Playbooks are stored in the `./playbooks` directory, and can be built, edited, and launched from the application
+- Supports for Raspian OS (aarch64) and Debian 11 Bullseye (x86_64)
 
-## Proof of Concept Feaures
-- The application will read a YAML file from the `./config` directory, and then execute the actions
-- The application will extract threat intelligence blacklist IP data using `PyMISP`
-- The application will interact with the remote APIs (integrations) as specified in the config files 
-- The application will log all actions and results to a log file, `pisword.log`
+## Proof of Concept Features
+- Reads a YAML file from the `./config` directory to and initializes enabled integrations (MISP and pfSense)
+- Loads a playbook from the `./playbooks` directory that performs the following actions:
+    1. Extracts threat intelligence blacklist IP data using `PyMISP` from a local, containerized `MISP` instance 
+    2. Generates pfSense firewall rules for each of the blacklist IPs and blocks them at the perimeter (pfSense WAN interface) 
+- All actions and results to a local log file, `pisword.log`. _Note: Logging level is set to `DEBUG` by default as development is ongoing._
 
 ## Future Features
-- Containerize the application using Docker
+- Fully containerized release of the project build, with orchestration support for DockerSwarm 
 - Graphical playbook visualization system
-- Encrypt the API keys and other sensitive data using a master key
+- Encrypt the API keys and other sensitive data in the configuration files using public/private key pairs
 - Support for additional integrations
-- A fully featured API for integrating with other applications
-- A more user friendly web interface for configuring and using the application
-- An automated installer for the application and dependencies
+- Full-featured Flask API for integrating with other applications
+- User-friendly web interface for configuring and using the application
+- Automated installer for application and its dependencies
+- Support for additional operating systems and architectures
 
 ## Known Issues
 - The menu system is not fully functional
@@ -140,10 +145,12 @@ References:
 - [Docker Install Instructions - Virtualized Raspberry Pi](https://docs.docker.com/engine/install/debian/)
 - [Docker Install Instructions - Raspberry Pi](https://docs.docker.com/engine/install/raspberry-pi-os/)
 
-## Install MISP 
-### TAU Docker MISP Install Instructions
-- [Reference documentation](https://github.com/ostefano/docker-misp)
-- Fetch install the latest version from their github page:
+## Install and Configure MISP 
+References:
+- [TAU Docker MISP Install Instructions](https://github.com/ostefano/docker-misp)
+- [MISP Project Website](http://www.misp-project.org)
+
+1. Fetch install the latest version from their github page:
 ```bash
 git clone https://github.com/ostefano/docker-misp.git
 cd docker-misp
@@ -232,26 +239,23 @@ SYNCSERVERS_1_KEY=
 # Disable IPv6 completely (this setting will persist until the container is removed)
 DISABLE_IPV6=true
 ```
-- Build and run the containers
+2. Build and run the containers
 ```bash
 sudo docker-compose build
 sudo docker-compose up
 ```
 
-References:
-- [MISP Docker Install Instructions](https://github.com/ostefano/docker-misp)
-- [MISP Project Website](http://www.misp-project.org)
+3. Login to MISP using the default credentials ('admin@{PISWORD_HOSTNAME}', 'admin') # Set the email address to the one specified in the .env file
+4. Once the container starts, change the admin password to something more secure
+5. Navigate to the [Auth Keys](https://{MISP_URL}/auth_keys/add) page and generate a new API key 
+6. If you have not done so already, create a new configuration file from the template
+```bash
+mv ./config/misp.template.yaml ./config/misp.yaml
+```
+8. Update the `url` and `api_key` fields in the `./config/misp.yaml` configuration file 
 
-# Configure MISP
-## Generate API KEY
-- Login to MISP using the default credentials ('admin@{PISWORD_HOSTNAME}', 'admin') # Set the email address to the one specified in the .env file
-- Change the admin password to something more secure
-- Navigate to the [Auth Keys](https://{MISP_URL}/auth_keys/add) page 
-- Copy the API key to ~/pisword/config/misp.yaml for later use:
-
-
-# Test PyMISP Script
-## Setup virtual environment
+## PyMISP Install and Configuration
+### Setup virtual environment
 - Uninstall all versions of virtualenv and reinstall the latest version:
 ```bash
 pip3 uninstall virtualenv
@@ -274,6 +278,8 @@ sudo apt-get install python3-venv
 ```
 
 ## Install PyMISP
+References:
+- [PyMISP GitHub Page](https://github.com/MISP/PyMISP)
 ```bash
 # Install rust (dependency)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh
@@ -309,6 +315,11 @@ poetry install -E fileobjects -E openioc -E virustotal -E docs -E pdfexport -E e
 ```
 
 ## Install pisword
+- From a terminal window, copy the latest version of Pi|SWORD from the Github page
+```bash
+git clone https://github.com/brxcybr/pisword/pisword.git
+cd ./pisword
+```
 - Initialize virtual environment
 ```bash
 source venv/bin/activate
@@ -319,22 +330,6 @@ pip install -r requirements.txt
 # OR
 pip install flask flask_restful pymisp pyyaml pyflowchart requests cssselect lxml importlib curses pyautogui
 ```
-### Enable SSL configuration
-- Generate a self-signed SSL certificate
-```bash
-openssl req -x509 -newkey rsa:2048 -keyout ~/Documents/pisword/certs/client.key -out ~/Documents/pisword/certs/client.crt -days 3650 -nodes
-```
-- Ensure that the path to the MISP SSL cert is exported for SSL verification
-```bash
-# export REQUESTS_CA_BUNDLE=~/Documents/docker-misp/ssl/cert.pem
-export REQUESTS_CA_BUNDLE=~/Documents/pisword/certs/client.crt
-
-# MISP Keys are stored at the following location:
-/etc/nginx/ssl/misp.key
-```
-
-### References:
-- [PyMISP GitHub Page](https://github.com/MISP/PyMISP)
 
 # Setup GNS3 For Testing (Optional)
 ![GNS3 Network Diagram](images/gns3_topology.png)
