@@ -337,7 +337,7 @@ export REQUESTS_CA_BUNDLE=~/Documents/pisword/certs/client.crt
 - [PyMISP GitHub Page](https://github.com/MISP/PyMISP)
 
 # Setup GNS3 For Testing (Optional)
-![GNS3 Network Diagram](images/gns3_network_diagram.png)
+![GNS3 Network Diagram](images/gns3_topology.png)
 This is an optional step for testing the application in a virtualized environment (e.g. without installing Pi|SWORD on a Raspberry Pi)
 
 - Reference: [GNS3 Windows Install](https://docs.gns3.com/docs/getting-started/installation/windows/)
