@@ -1,0 +1,24 @@
+Playbook:
+  name: PlaybookTemplate
+  enabled: false
+  integration_dependencies:
+  logic:
+    - function: StartFunction
+      data_dependencies:
+      trigger: 
+        type: always
+      on_success: SecondFunction
+      on_fail: FailFunction
+    - function: SecondFunction
+      data_dependencies:
+      trigger: 
+        type: always
+      on_success: ThirdFunction
+    - function: ThirdFunction
+      data_dependencies:
+      trigger: 
+        type: always
+    - function: FailFunction
+      data_dependencies:
+      trigger: 
+        type: always
