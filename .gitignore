@@ -161,6 +161,10 @@ cython_debug/
 
 # Local environment files
 *.log
+api_endpoints.py
 certs/*
+config/misp.yaml
+config/pfsense.yaml
+README_LOCAL.md 
 feeds/
 practicum.code-workspace

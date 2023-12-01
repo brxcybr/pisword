@@ -1,9 +1,9 @@
 pfsense:
   enabled: True
-  url: "https://pfsense.pisword.local"
-  api_key: "706973776f7264 9347b0f659c37d4c49554faa09b6a18c"
-  ssl: False
-  verifycert: False
+  url: "PFSENSE_URL" # update with local pfSense API URL
+  api_key: "API_KEY" # update with local pfSense API key
+  ssl: False         # Set to `True` to enable SSL
+  verifycert: False  # Set to `True` to verify pfSense Certificate
   accepts:
     - ip-dst
   returns:

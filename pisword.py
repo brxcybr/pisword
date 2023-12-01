@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
 """
-- Author: Blane Richoux
-- Email: brichoux3@gatech.edu
-- Due Date: 12-5-2023
+- Author: brx.cybr@gmail.com
 - Title: Pi|SWORD
 - Description: The program is a SOAR (Security Orchestration, Automation, and Response) application that is 
 purpose-built to run efficiently in Edge environments, such as on a Raspberry Pi, but can run as a container
@@ -29,9 +27,6 @@ does not need to store any data between runs.
 import os
 from classes import Log
 from menu import Menu
-from api_endpoints import Welcome, Login, ListPlaybooks, CreatePlaybook, ExecutePlaybook, StopPlaybook, RemovePlaybook, Configure, Status, Logout
-from flask import Flask, request, jsonify
-from flask_restful import Api, Resource
 import curses
 import traceback
 import argparse
@@ -40,17 +35,22 @@ import argparse
 log = Log.get_instance()
 log.info("Application is starting...")
 
+# Set server name 
+SERVER_NAME = 'pisword-dev.local' # Set this to the hostname of the server
+  
+# FOR USE IN FUTURE API IMPLEMENTATION
+'''  
+from api_endpoints import Welcome, Login, ListPlaybooks, CreatePlaybook, ExecutePlaybook, StopPlaybook, RemovePlaybook, Configure, Status, Logout
+from flask import Flask, request, jsonify
+from flask_restful import Api, Resource
+
+# Initialize the API and add in the different classes to the API
 # Create the Flask app and API
 pisword = Flask(__name__)
 api = Api(pisword)
 
-# Set server name 
-SERVER_NAME = 'pisword-dev.local'
-#SERVER_NAME = 'pisword.local'
-    
-# Initialize the API and add in the different classes to the API
 api.add_resource(Welcome, '/')
-#api.add_resource(Login, '/login')
+api.add_resource(Login, '/login')
 api.add_resource(ListPlaybooks, '/list')
 api.add_resource(CreatePlaybook, '/create')
 api.add_resource(ExecutePlaybook, '/execute')
@@ -58,7 +58,8 @@ api.add_resource(StopPlaybook, '/stop')
 api.add_resource(RemovePlaybook, '/remove')
 api.add_resource(Configure, '/configure')
 api.add_resource(Status, '/status')
-#api.add_resource(Logout, '/logout')
+api.add_resource(Logout, '/logout')
+'''
 
 def parse_arguments():
     """
@@ -105,13 +106,16 @@ def main(stdscr):
         perform these actions in a loop until they logout. This mapping should
         be maintained in your implementation for the options.
     """
+    
+    # FOR FUTURE USE
+    '''
     # Initialize server variables to keep track of progress
     server_message = 'UNKNOWN'
     server_status = 'UNKNOWN'
     session_token = 'UNKNOWN'
     is_login = False
     
-    '''
+
     login_return = Login()
 
     server_message = login_return['message']

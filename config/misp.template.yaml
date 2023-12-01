@@ -1,9 +1,9 @@
 misp:
   enabled: True
-  url: "https://misp.pisword-dev.local"
-  api_key: "qEpGART6KisGULUm60qOYE4nbi9uZN9v8v9kbtm5"
-  ssl: False
-  verifycert: False
+  url: "https://{MISP_URL}" # Update with local MISP URL
+  api_key: "{APT_KEY}"      # Update with local MISP API key
+  ssl: False                # Set to `true` to use SSL
+  verifycert: False         # Set to `true` to verify MISP certificate (Use ONLY if both certs are issues from same trusted Root CA)
   accepts:
     - ip-dst
     - domain
