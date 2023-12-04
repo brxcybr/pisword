@@ -1,0 +1,28 @@
+Playbook:
+  name: test
+  enabled: true
+  integration_dependencies: 
+    - misp
+    - pfsense
+  logic:
+    - function: enable_threat_feed
+      trigger: 
+        type: always
+      on_success: get_misp_event_by_type
+      on_fail: halt_playbook
+    - function: get_misp_event_by_type
+      data_dependencies: 
+        - ip-dst 
+      trigger: 
+        type: time
+        duration: 60
+      on_success: add_firewall_rule
+      on_fail: halt_playbook
+    - function: add_firewall_rule
+      trigger: 
+        type: always
+      on_success: get_misp_event_by_type
+      on_fail: halt_playbook
+    - function: halt_playbook
+      trigger: 
+        type: always
