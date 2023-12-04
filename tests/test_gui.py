@@ -13,7 +13,7 @@ class TestPlaybookCreationGUI(unittest.TestCase):
         self.playbook_filepath = Path(f"./playbooks/{self.playbook_name}.yaml")
         self.new_playbook_filepath = Path(f"./playbooks/{self.new_playbook_name}.yaml")
         # Start the application in a subprocess
-        self.app_process = subprocess.Popen(['python', 'pisword.py'], 
+        self.app_process = subprocess.Popen(['python', 'pysoar.py'], 
                                             stdout=subprocess.PIPE, 
                                             stderr=subprocess.PIPE,
                                             stdin=subprocess.PIPE)

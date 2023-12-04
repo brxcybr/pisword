@@ -43,7 +43,7 @@ packaging==23.2
 pcodedmp==1.2.6
 Pillow==10.1.0
 # Editable install with no version control (pisword==0.1)
--e /home/odysseus/Documents/pisword
+-e ~/Documents/pySOAR
 pkg_resources==0.0.0
 publicsuffixlist==0.10.0.20231030
 PyAutoGUI==0.9.54

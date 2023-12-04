@@ -1,7 +1,7 @@
 pfsense:
   enabled: True
-  url: "PFSENSE_URL" # update with local pfSense API URL
-  api_key: "API_KEY" # update with local pfSense API key
+  url: "{PFSENSE_URL}" # update with local pfSense API URL
+  api_key: "{API_KEY}" # update with local pfSense API key
   ssl: False         # Set to `True` to enable SSL
   verifycert: False  # Set to `True` to verify pfSense Certificate
   accepts:

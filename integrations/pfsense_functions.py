@@ -570,7 +570,7 @@ class FirewallRule:
             dst_port, 
             proto="any", 
             direction="any", 
-            descr="Pi|SWORD Generated Pass Rule", 
+            descr="PySOAR Generated Pass Rule", 
             interface="wan", 
             gateway="", 
             top=True
@@ -588,7 +588,7 @@ class FirewallRule:
             dst_port, 
             proto="any", 
             direction="any", 
-            descr="Pi|SWORD Generated Pass Rule", 
+            descr="PySOAR Generated Pass Rule", 
             interface="wan", 
             gateway="", 
             top=True

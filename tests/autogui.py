@@ -9,7 +9,7 @@ import time
 
 def create_playbook(new_playbook_name='practicum', interval=2):
     # Start the application in a subprocess
-    app_process = subprocess.Popen(['python', 'pisword.py'], 
+    app_process = subprocess.Popen(['python', 'pysoar.py'], 
                                         stdout=subprocess.PIPE, 
                                         stderr=subprocess.PIPE,
                                         stdin=subprocess.PIPE)

@@ -1190,10 +1190,10 @@ class Log:
 
     def __init__(self):
         """Initialize the logger with specific settings."""
-        self.logger = logging.getLogger('Pi|SWORD')
+        self.logger = logging.getLogger('PySOAR')
         self.set_level(logging.DEBUG)  # Default log level
 
-        log_file = 'pisword.log'
+        log_file = 'pysoar.log'
         file_handler = RotatingFileHandler(log_file, maxBytes=10485760, backupCount=5)
         console_handler = logging.StreamHandler()
 

@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="pisword",
+    name="pysoar",
     version="0.1",
     packages=find_packages(),
 )

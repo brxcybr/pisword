@@ -1,12 +1,14 @@
-![PiSword Header](images/pisword_logo.png)
-# Pi|SWORD
+=======
+![PySOAR Header](images/PySOAR_logo.png)
+# PySOAR
 *A Python-based SOAR Platform, lightweight enough for _any_ environment*
 
 ## Description
-_*Pi|SWORD*_ is a **SOAR** _(Security Orchestration, Automation, and Response)_ application and integration framework that is 
+_*PySOAR*_ is a **SOAR** _(Security Orchestration, Automation, and Response)_ application and integration framework that is 
 purpose-built to run efficiently in edge or small-office/home-office environments, such as on a Raspberry Pi or inside of a Virtual Machine
 - It provides an extensible framework for third-party integration support, playbook building, and management
-- Pi|SWORD is designed to run statelessly, meaning that it 
+- PySOAR is designed to run statelessly, meaning that it 
+>>>>>>> master
 does not need to store any data between runs, and reads the local configuration files and playbooks at launch.
 - Third-party integrations are initialized using YAML configuration files from the `./config` directory, which allows users to build playbooks from supported integration functions
 - Supported integration functions are imported dynamically from the `./integrations` directory, which can be modified to provide additional functionality
@@ -18,7 +20,7 @@ does not need to store any data between runs, and reads the local configuration 
 - Loads a playbook from the `./playbooks` directory that performs the following actions:
     1. Extracts threat intelligence blacklist IP data using `PyMISP` from a local, containerized `MISP` instance 
     2. Generates pfSense firewall rules for each of the blacklist IPs and blocks them at the perimeter (pfSense WAN interface) 
-- All actions and results to a local log file, `pisword.log`. _Note: Logging level is set to `DEBUG` by default as development is ongoing._
+- All actions and results to a local log file, `PySOAR.log`. _Note: Logging level is set to `DEBUG` by default as development is ongoing._
 
 ## Future Features
 - Fully containerized release of the project build, with orchestration support for DockerSwarm 
@@ -39,14 +41,14 @@ does not need to store any data between runs, and reads the local configuration 
 - Run the application by executing the following command:
 ```bash
 # Tested using Python 3.9.7 on Debian 11 (Bullseye)
-$ python pisword.py
+$ python pysoar.py
 ```
-![PiSword Menu](images/main_menu.png)
+![PySOAR Menu](images/main_menu.png)
 
 ## Program Logic
-![PiSword Program Logic](images/pisword_logic_flowchart.png)
+![PySOAR Program Logic](images/pysoar_logic_flowchart.png)
 
-# Pi|SWORD Install and Configuration
+# PySOAR Install and Configuration
 ## Installing the operating system
 - Install the latest 64-bit version of Raspbian on your Raspberry Pi from the [Raspberry Pi Foundation Site](https://www.raspberrypi.org/downloads/raspbian/).
 - For a virtualized deployment, download the arm64 Debian 11 (Bullseye) ISO from the [Debian website](https://www.debian.org/releases/bullseye/)
@@ -200,9 +202,9 @@ PYPI_PYMISP_VERSION="==2.4.176"
 ##
 
 # Email/username for user #1, defaults to MISP's default (admin@admin.test)
-ADMIN_EMAIL=admin@{PISWORD_HOSTNAME} # Update domain name to match the hostname of the PiSword host
+ADMIN_EMAIL=admin@{PYSOAR_HOSTNAME} # Update domain name to match the hostname of the PySOAR host
 # name of org #1, default to MISP's default (ORGNAME)
-ADMIN_ORG=pisword                    # Change to match the name of the organization
+ADMIN_ORG=pysoar                    # Change to match the name of the organization
 # defaults to an automatically generated one
 ADMIN_KEY=
 # defaults to MISP's default (admin)
@@ -258,7 +260,7 @@ sudo docker-compose build
 sudo docker-compose up
 ```
 
-3. Login to MISP using the default credentials `admin@{PISWORD_HOSTNAME} : admin` # Set the email address to the one specified in the .env file
+3. Login to MISP using the default credentials `admin@{PYSOAR_HOSTNAME} : admin` # Set the email address to the one specified in the .env file
 4. Once the container starts, change the admin password to something more secure
 5. Navigate to the [Auth Keys](https://{MISP_URL}/auth_keys/add) page and generate a new API key 
 6. If you have not done so already, create a new configuration file from the template
@@ -327,11 +329,11 @@ pip install poetry pipenv pytest pytest-cov pydeep2 zipp
 poetry install -E fileobjects -E openioc -E virustotal -E docs -E pdfexport -E email
 ```
 
-## Install pisword
-- From a terminal window, copy the latest version of Pi|SWORD from the Github page
+## Install PySOAR
+- From a terminal window, copy the latest version of PySOAR from the Github page
 ```bash
-git clone https://github.com/brxcybr/pisword/pisword.git
-cd ./pisword
+git clone https://github.com/brxcybr/PySOAR/PySOAR.git
+cd ./pysoar
 ```
 - Initialize virtual environment
 ```bash
@@ -346,7 +348,7 @@ pip install flask flask_restful pymisp pyyaml pyflowchart requests cssselect lxm
 
 # Setup GNS3 For Testing (Optional)
 ![GNS3 Network Diagram](images/gns3_topology.png)
-This is an optional step for testing the application in a virtualized environment (e.g. without installing Pi|SWORD on a Raspberry Pi)
+This is an optional step for testing the application in a virtualized environment (e.g. without installing PySOAR on a Raspberry Pi)
 
 References: 
 - [GNS3 Windows Install](https://docs.gns3.com/docs/getting-started/installation/windows/)
@@ -385,16 +387,16 @@ _*Note*: The `eth0` interface is used for management and is not connected to the
 
 16. Start the pfSense node and open the console by right clicking on the node and selecting `Console`. Select option `2` to set the WAN interface to DHCP and then configure the LAN interface as desired.
 
-17. Import the PiSword VM into GNS3 by clicking `Edit` -> `Preferences` -> `VMware VMs` (or `VirtualBox VMs`) -> `New` -> `Browse` -> `Select the PiSword VM` -> `Finish` -> `Apply` -> `OK`
+17. Import the PySOAR VM into GNS3 by clicking `Edit` -> `Preferences` -> `VMware VMs` (or `VirtualBox VMs`) -> `New` -> `Browse` -> `Select the PySOAR VM` -> `Finish` -> `Apply` -> `OK`
 
 18. Drag a switch node into the diagram and connect `Ethernet0` to the pfSense LAN interface, `vmx1`.
 
-19. Drag the Pi|SWORD VM into the topology and connect it to `Ethernet1` interface on the switch node. 
-`*Note*: You may need to change the network adapter type to vmxnet3 in the PiSword VM settings. You can force the PiSword VM to use DHCP by running the following command:`
+19. Drag the PySOAR VM into the topology and connect it to `Ethernet1` interface on the switch node. 
+`*Note*: You may need to change the network adapter type to vmxnet3 in the PySOAR VM settings. You can force the PySOAR VM to use DHCP by running the following command:`
 ```bash
 sudo dhclient {INTERFACE_NAME} -s {PFSENSE_LAN_IP}
 ```
-20. Your PiSword VM should now be able to communicate with the pfSense VM and the internet.
+20. Your PySOAR VM should now be able to communicate with the pfSense VM and the internet.
 
 _*Note*: You will have to configure `allow` rules on the pfSense WAN interface to allow `ssh` traffic into the environment. You can also configure port forwarding to access the MISP Web console from an external environment. It is recommended to add an entry for the pfSense WAN interface IP address to your local system's `hosts` file if using this deployment._
 
@@ -404,7 +406,7 @@ Linux:
 sudo vi /etc/hosts 
 ...
 
-{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PYSOAR_HOSTNAME}
 ```
 
 Windows:
@@ -412,7 +414,7 @@ Windows:
 # Launch a PowerShell terminal as Administrator
 notepad C:\Windows\System32\drivers\etc\hosts # Windows users only
 ...
-{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PISWORD_HOSTNAME}
+{PFSENSE_WAN_UP}    {PFSENSE_HOSTNAME}    {MISP_HOSTNAME}    {PYSOAR_HOSTNAME}
 ```
 
 ## Install and configure pfSense API
@@ -429,7 +431,7 @@ pkg -C /dev/null add https://github.com/jaredhendrickson13/pfsense-api/releases/
     - Make a new CA in the PFSense GUI menu 
     - System > Cert Manager > CAs > Add
     - Store the certificate in the `./certs` folder
-    - Add the CA to the trusted CA store on the PiSword host
+    - Add the CA to the trusted CA store on the PySOAR host
     ```bash
     # Install ca-certificates if it is not already installed:
     sudo apt-get install ca-certificates curl gnupg -y
@@ -480,8 +482,8 @@ pkg -C /dev/null add https://github.com/jaredhendrickson13/pfsense-api/releases/
         Name: `WebCfg - All pages`
 2. Create API User
     - System > User Manager > Users > Add
-    - Username: `pisword`       # Can be anything
-    - Password: `pisword_api_user_pw` # Can be anything
+    - Username: `pysoar`       # Can be anything
+    - Password: `pysoar_api_user_pw` # Can be anything
     - Full Name: `API User`    # Can be anything
     - Groups: `api_users`      # Select the group you created in step 1
     - Create Certificate for User
@@ -492,13 +494,13 @@ pkg -C /dev/null add https://github.com/jaredhendrickson13/pfsense-api/releases/
         - Digest Algorithm: `SHA256`
         - Lifetime: `3650`
 3. Copy down API key
-    - System > User Manager > Users > pisword > API Keys
+    - System > User Manager > Users > pysoar > API Keys
     - Copy down the client-id and API key
     - Example:
-        - Usernane: `pisword`
+        - Usernane: `pysoar`
         - clientid: `86753098675309` # Your cliet-id and api-key will be different
         - api-key: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-4. Set API key variable in the bashrc file on the PiSword host 
+4. Set API key variable in the bashrc file on the PySOAR host 
 _Note: The pfSense API key consists of the client-id and api-key separated by a space_
 ```bash
 # Optional, for local testing only
@@ -510,21 +512,21 @@ echo "export PFSENSE_API_KEY='86753098675309 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'" 
 mv ./config/pfsense.template.yaml ./config/pfsense.yaml
 ```
    
-### Create certificates for MISP, PiSword, and api-user
+### Create certificates for MISP, PySOAR, and api-user
 1. Following the same process as the pfSense server certificate, create a new certificate for the MISP server
     - System > Cert Manager > Certificates > Add/Sign
     - Create a new server certificates and name it `misp_server`
     - Go to System > Advanced > Admin Access
     - Set the SSL certificate to `misp_server`
-    - Set the common name as `{MISP_HOSTNAME}` # e.g. `misp.pisword.local`
+    - Set the common name as `{MISP_HOSTNAME}` # e.g. `misp.pysoar.local`
     - Set an alternate common name if desired
     - Save the certificates to the `./certs` folder
-2. Following the same process as the pfSense server certificate, create a new certificate for the PiSword server
+2. Following the same process as the pfSense server certificate, create a new certificate for the PySOAR server
     - System > Cert Manager > Certificates > Add/Sign
-    - Create a new server certificates and name it `pisword_server`
+    - Create a new server certificates and name it `pysoar_server`
     - Go to System > Advanced > Admin Access
-    - Set the SSL certificate to `pisword_server`
-    - Set the common name as `pisword.pisword-dev.local`
+    - Set the SSL certificate to `pysoar_server`
+    - Set the common name as `pysoar.pysoar-dev.local`
     - Set an alternate common name (if desired)
     - Save the certificates to the `./certs` folder
 
@@ -556,10 +558,10 @@ Oct 20 17:20:39 pfSense dhcp6c[9396]: transmit failed: Network is down
 ```
 - Example PfSense Config History Logs:
 ```bash
-{'time': 1699318469, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Successfully edited user pisword', 'version': '22.9', 'filesize': 52353}
-{'time': 1699318430, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Created internal certificate pisword_api_user', 'version': '22.9', 'filesize': 52341}
+{'time': 1699318469, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Successfully edited user pysoar', 'version': '22.9', 'filesize': 52353}
+{'time': 1699318430, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Created internal certificate pysoar_api_user', 'version': '22.9', 'filesize': 52341}
 {'time': 1699317752, 'description': 'admin@XX.XX.X.XX (Local Database): Updated Certificate Authority GNS3-CA', 'version': '22.9', 'filesize': 47762}
-{'time': 1699317681, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Deleted certificate pisword_ovpn', 'version': '22.9', 'filesize': 47765}
+{'time': 1699317681, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Deleted certificate pysoar_ovpn', 'version': '22.9', 'filesize': 47765}
 {'time': 1699317629, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Updated Certificate Authority GNS3-CA', 'version': '22.9', 'filesize': 52431}
 {'time': 1699286114, 'description': 'admin@XXX.XXX.XX.XXX (Local Database): Created internal certificate pfsense_client', 'version': '22.9', 'filesize': 52340}
 {'time': 1699026820, 'description': '(system): wan IP configuration from console menu', 'version': '22.9', 'filesize': 47674}
