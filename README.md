@@ -1,5 +1,5 @@
 =======
-![PySOAR Header](images/PySOAR_logo.png)
+![PySOAR Header](images/pysoar_logo.png)
 # PySOAR
 *A Python-based SOAR Platform, lightweight enough for _any_ environment*
 
