@@ -1,5 +1,5 @@
 =======
-![PySOAR Header](images/PySOAR_logo.png)
+![PySOAR Header](images/pysoar_logo.png)
 # PySOAR
 *A Python-based SOAR Platform, lightweight enough for _any_ environment*
 
@@ -7,9 +7,7 @@
 _*PySOAR*_ is a **SOAR** _(Security Orchestration, Automation, and Response)_ application and integration framework that is 
 purpose-built to run efficiently in edge or small-office/home-office environments, such as on a Raspberry Pi or inside of a Virtual Machine
 - It provides an extensible framework for third-party integration support, playbook building, and management
-- PySOAR is designed to run statelessly, meaning that it 
->>>>>>> master
-does not need to store any data between runs, and reads the local configuration files and playbooks at launch.
+- PySOAR is designed to run statelessly, meaning that it does not need to store any data between runs, and reads the local configuration files and playbooks at launch.
 - Third-party integrations are initialized using YAML configuration files from the `./config` directory, which allows users to build playbooks from supported integration functions
 - Supported integration functions are imported dynamically from the `./integrations` directory, which can be modified to provide additional functionality
 - Playbooks are stored in the `./playbooks` directory, and can be built, edited, and launched from the application
